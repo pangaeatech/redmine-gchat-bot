@@ -1,4 +1,4 @@
 # Do not include azure-functions-worker as it may conflict with the Azure Functions platform
 
-azure-functions
-json
+azure-functions==1.10.1
+jsons==1.6.1
