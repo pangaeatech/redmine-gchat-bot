@@ -14,7 +14,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse("Bad Request", status_code=400)
     
     try:
-        return func.HttpResponse(jsons.dump(handle_event(event)))
+        return func.HttpResponse(jsons.dumpb(handle_event(event)))
     except PermissionError:
         logging.exception('Unauthorized')
         return func.HttpResponse("Unauthorized", status_code=401)
