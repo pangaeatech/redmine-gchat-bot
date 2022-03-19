@@ -7,19 +7,28 @@ import azure.functions as func
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
-    name = req.params.get('name')
-    if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get('name')
+    try:
+        event = req.get_json()
+    except:
+        logging.exception('Bad Request')
+        return func.HttpResponse("Bad Request", status_code=400)
+    
+    try:
+        return func.HttpResponse(jsons.dump(handle_event(event)))
+    except PermissionError:
+        logging.exception('Unauthorized')
+        return func.HttpResponse("Unauthorized", status_code=401)
+    except:
+        logging.exception('Internal Server Error')
+        return func.HttpResponse("Internal Server Error", status_code=500)
 
-    if name:
-        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
+def handle_event(event: object) -> object:
+    """Handles an event from Google Chat."""
+    if event['type'] == 'ADDED_TO_SPACE' and not event['space']['singleUserBotDm']:
+        text = 'Thanks for adding me to "%s"!' % (event['space']['displayName'] if event['space']['displayName'] else 'this chat')
+    elif event['type'] == 'MESSAGE':
+        text = 'You said: `%s`' % event['message']['text']
     else:
-        return func.HttpResponse(
-             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
-             status_code=200
-        )
+        return None
+
+    return {'text': text}
