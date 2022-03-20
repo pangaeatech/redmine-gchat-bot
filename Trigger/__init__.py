@@ -58,7 +58,7 @@ def verify_auth(bearer: str) -> None:
     @param bearer: The authorization string
     @raise Error: If authorization fails
     """
-    token = client.verify_id_token(bearer.replace("Bearer ", ""), AUDIENCE, cert_uri=PUBLIC_CERT_URL_PREFIX + CHAT_ISSUER)
+    token = client.verify_id_token(bearer.replace("Bearer ", "", 1), AUDIENCE, cert_uri=PUBLIC_CERT_URL_PREFIX + CHAT_ISSUER)
 
     if token['iss'] != CHAT_ISSUER:
         raise PermissionError()
