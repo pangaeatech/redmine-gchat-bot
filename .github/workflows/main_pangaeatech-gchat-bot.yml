@@ -39,7 +39,7 @@ jobs:
       - run:
           sed -i "s/{{AUDIENCE}}/${AUDIENCE}/g" Trigger/__init__.py
         env:
-          AUDIENCE: "${{ secret.GCHAT_AUDIENCE }}"
+          AUDIENCE: "${{ secrets.GCHAT_AUDIENCE }}"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
