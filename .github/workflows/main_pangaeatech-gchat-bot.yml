@@ -48,6 +48,7 @@ jobs:
           path: |
             . 
             !venv/
+            !tests/
 
   deploy:
     runs-on: ubuntu-latest

@@ -12,7 +12,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
     try:
-        verify_auth(req["headers"]["authorization"])
+        verify_auth(req.headers["authorization"])
     except:
         logging.exception('Unauthorized')
         return func.HttpResponse("Unauthorized", status_code=401)
